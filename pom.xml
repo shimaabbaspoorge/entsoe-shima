@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <!-- Project configuration -->
+        <encoding>UTF-8</encoding>
+        <haltOnCoverageFailure>true</haltOnCoverageFailure>
+        <jdk-version>17</jdk-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Kotlin -->
+        <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <kotlin-version>2.1.0</kotlin-version>
+
+        <!-- Dependency versions -->
+        <assertj-version>3.26.3</assertj-version>
+        <flow-developer-sdk-version>11.510.0</flow-developer-sdk-version>
+        <jakarta.ws.rs-api-version>3.1.0</jakarta.ws.rs-api-version>
+        <junit5-version>5.11.3</junit5-version>
+        <slf4j-version>2.0.16</slf4j-version>
+        <wiremock-version>3.9.2</wiremock-version>
+
+        <!-- Plugins -->
+        <maven-exec-version>3.5.0</maven-exec-version>
+        <maven-surefire-version>3.5.2</maven-surefire-version>
+    </properties>
+
+    <groupId>com.greenbird.utilihive.integration.flow-developer</groupId>
+    <artifactId>flow-developer-example-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>Presales Project</name>
+    <description>PreSales Project for Flow Developers</description>
+
+    <!--
+        The flow-developer-sdk dependency is fetched from this repository.
+        The credentials for the greenbird repository are only available for licensed users.
+        They must be added to the "servers" section of your Maven settings.xml file.
+        See README.adoc for more details.
+    -->
+    <repositories>
+        <repository>
+            <id>utilihive-sdk</id>
+            <url>https://nexus.greenbird.com/content/repositories/utilihive-sdk/</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+
+        <dependencies>
+            <!-- JUnit 5 -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit5-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+
+        <!-- Greenbird -->
+        <dependency>
+            <groupId>com.greenbird.utilihive.integration.flow-developer</groupId>
+            <artifactId>flow-developer-sdk</artifactId>
+            <version>${flow-developer-sdk-version}</version>
+        </dependency>
+
+        <!-- JAX-RS - REST client -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>test</scope>
+            <version>${jakarta.ws.rs-api-version}</version>
+        </dependency>
+
+        <!-- SLF4J-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>runtime</scope>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <!-- TEST -->
+
+        <!-- AssertJ -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- WireMock -->
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>${wiremock-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${maven-exec-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin-version}</version>
+
+                <configuration>
+                    <args>
+                        <arg>-java-parameters</arg>
+                    </args>
+                    <jvmTarget>${jdk-version}</jvmTarget>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                                <sourceDir>src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/test/kotlin</sourceDir>
+                                <sourceDir>src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!--
+                        Activate the use of TCP to transmit events to the plugin to avoid getting
+                        "Corrupted STDOUT by directly writing to native stream in forked JVM" errors when
+                        running concurrent tests.
+                    -->
+                    <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
+                    <!--
+                        Disable forking so we can see the log output from the test immediately, instead of at the
+                        end of each test execution.
+                     -->
+                    <forkCount>0</forkCount>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+
+        <!--
+            Encrypt secrets from the command line:
+            mvn -P encrypt-secret -D uhSecretsKey=<encryption key> -D uhSecretsValue=<value>
+         -->
+        <profile>
+            <id>encrypt-secret</id>
+            <build>
+                <defaultGoal>validate</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>encrypt-secret</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>
+                                        com.greenbird.utilihive.integration.flowdeveloper.sdk.utils.security.SecretsEncryptor
+                                    </mainClass>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!--
+            Decrypt secrets from the command line:
+            mvn -P decrypt-secret -D uhSecretsKey=<encryption key> -D uhSecretsValue=<encrypted value>
+         -->
+        <profile>
+            <id>decrypt-secret</id>
+            <build>
+                <defaultGoal>validate</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>decrypt-secret</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>
+                                        com.greenbird.utilihive.integration.flowdeveloper.sdk.utils.security.SecretsDecryptor
+                                    </mainClass>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!--
+            Deploy flows, resources and secrets from the command line.
+
+            The Deployer takes some configuration parameters that can be sourced from environment variables,
+            system properties, classpath configuration and input prompted from the user.
+            See the Utilihive deployment documentation for details.
+
+            In this example we rely on the following being available as classpath configuration for the 'sdktraining'
+            ownerId in the 'test' environment. This configuration is found in
+            src/main/resources/deployment/sdktraining/test/deployer.properties.
+
+            * identity-api-root:   Root URI for the Utilihive Identity API (including .../api).
+                                   Used to provide access tokens to the deployer.
+                                   E.g. `https://api.dev.utilihive.io/metercloud-integration-identity/api`.
+            * management-api-root: Root URI for the Utilihive customers management API (up to, but not including .../\{ownerId}).
+                                   Used to manage deployments.
+                                   E.g. `https://api.dev.utilihive.io`.
+            * flow-scan-root:      The root package to scan for flow specs in.
+                                   Will improve the performance of the flow scanning.
+                                   E.g. `com.mycompany.flows`.
+
+            We provide these parameters as system properties on the command line (-D <name>=<value>):
+            * owner-id:            The id of the customer organization owning the deployments.
+            * environment:         The environment to deploy to.
+
+            We do not provide these required parameters, and expect to be prompted for them:
+            * deployer-user:       The username of a customer deployer.
+                                   Must have the `Admin` role for the selected owner and environment.
+            * deployer-pwd:  The password of the customer deployer.
+
+            We do not provide this parameter, but expect it to be available as an environment variable:
+            * decryption-key:      The decryption key used to decrypt any sensitive values stored in property files.
+
+
+            In this example we are not using these optional parameters:
+            * groups:              Comma separated list of flow groups to select for deployment.
+                                   All flows will be selected if this parameter is not set.
+                                   Flows can be associated with groups by using the `group()`
+                                   flow spec builder function.
+            * flow-pattern:        Regular expression that will be used to filter flows to be processed by flow id.
+            * resource-pattern:    Regular expression that will be used to filter resources to be processed by resource id.
+            * secrets-pattern:     Regular expression that will be used to filter secrets to be processed by secrets key.
+            * dry-run:             Run the process, but skip all mutating operations. Default: false.
+            * forced:              Deploy flows and resource even if they are not outdated on the server. Default: false.
+            * command:             Which operation the deployer should execute. Either deploy, diff or delete. Default: deploy.
+
+            mvn -P deploy-flows -D owner-id=sdktraining -D environment=test
+         -->
+        <profile>
+            <id>deploy-flows</id>
+            <build>
+                <defaultGoal>compile</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy-flows</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>
+                                        com.greenbird.utilihive.integration.deployment.deployer.Deployer
+                                    </mainClass>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
